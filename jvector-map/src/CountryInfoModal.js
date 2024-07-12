@@ -6,18 +6,20 @@ Modal.setAppElement('#root');
 
 const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName, continent  }) => {
   const [infoUrl, setInfoUrl] = useState(null);
+  const [infoLv, setInfoLv] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (isoCode) {
       setLoading(true);
-      axios.get(`http://175.120.206.28:3333/get/search?continent=&country=${encodeURIComponent(isoCode)}`)
+      axios.get(`http://175.120.206.28:3333/search/nara?&country=${encodeURIComponent(isoCode)}`)
         .then(response => {
           console.log(response.data)
           const { data } = response.data;
           if (data) {
-            setInfoUrl(data.url);
+            setInfoUrl(data[0].url);
+            setInfoLv(data[0].lv);
           } else {
             setError('정보 없음');
           }
@@ -45,8 +47,8 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName, contin
         },
       }}
     >
-      <h1>나라 여행 위험 정보</h1>
-      <p>{isoCode}</p>
+      <h1>여행 위험 정도</h1>
+      <p>{countryName}</p>
       {loading ? (
         <p>로딩 중...</p>
       ) : error ? (
@@ -54,6 +56,7 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName, contin
       ) : (
         <img src={infoUrl} alt={`${countryName} 정보`} style={{ width: '100px', height: 'auto' }} />
       )}
+      <p>경보 단계 : {infoLv}</p>
       <button onClick={onRequestClose}>닫기</button>
     </Modal>
   );
