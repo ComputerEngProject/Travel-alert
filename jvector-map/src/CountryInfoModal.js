@@ -12,6 +12,7 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName, contin
 
   useEffect(() => {
     if (isoCode) {
+      console.log(isoCode)
       setLoading(true);
       axios.get(`http://175.120.206.28:3333/search/nara?&country=${encodeURIComponent(isoCode)}`)
         .then(response => {
@@ -54,7 +55,7 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName, contin
       ) : error ? (
         <p>{error}</p>
       ) : (
-        <img src={infoUrl} alt={`${countryName} 정보`} style={{ width: '100px', height: 'auto' }} />
+        <img src={infoUrl} alt={`${countryName} 정보`} style={{ width: '500px', height: 'auto' }} />
       )}
       <p>경보 단계 : {infoLv}</p>
       <button onClick={onRequestClose}>닫기</button>
