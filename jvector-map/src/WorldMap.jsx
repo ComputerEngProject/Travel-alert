@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { VectorMap } from '@react-jvectormap/core';
 import { worldMill } from '@react-jvectormap/world';
-import Modal from "react-modal";
+import CountryInfoModal from './CountryInfoModal';
 
 const countryNames = {
   // 아시아
@@ -14,7 +14,6 @@ const countryNames = {
   BN: '브루나이',
   KH: '캄보디아',
   CN: '중국',
-  CY: '키프로스',
   GE: '조지아',
   IN: '인도',
   ID: '인도네시아',
@@ -214,10 +213,10 @@ const countryNames = {
 };
 
 const continents = {
-  Africa: ['DZ', 'AO', 'BJ', 'BW', 'BF', 'BI', 'CM', 'CV','CI', 'CF', 'TD', 'KM', 'CD', 'CG','DJ', 'EG', 'GQ', 'ER', 'SZ', 'ET', 'GA', 'GM', 'GH', 'GN', 'GW', 'KE', 'LS', 'LR', 'LY', 'MG', 'MW', 'ML', 'MR', 'MU', 'YT', 'MA', 'MZ', 'NA', 'NE', 'NG', 'RW', 'ST', 'SN', 'SC', 'SL', 'SO', 'ZA', 'SS', 'SD', 'TZ', 'TG', 'TN', 'UG', 'EH', 'ZA', 'ZM', 'ZW'],
-  Asia: ['AF', 'AM', 'AZ', 'BH', 'BD', 'BT', 'BN', 'KH', 'CN', 'CY', 'GE', 'IN', 'ID', 'IR', 'IQ', 'IL', 'JP', 'JO', 'KZ', 'KW', 'KG', 'LA', 'LB', 'MY', 'MV', 'MN', 'MM', 'NP', 'KP', 'OM', 'PK', 'PS', 'PH', 'QA', 'SA', 'SG', 'KR', 'LK', 'SY', 'TJ', 'TH', 'TL', 'TR', 'TM', 'AE', 'UZ', 'VN', 'YE','TW'],
-  Europe: ['AL', 'AD', 'AT', 'BA', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'MC', 'MD', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'UA', 'GB', 'VA','BY'],
-  America: ['GL','AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE','CA', 'MX', 'US', 'GT', 'BZ', 'HN', 'SV', 'NI', 'CR', 'PA', 'JM', 'DO', 'HT', 'CU', 'BS', 'BB', 'GD', 'LC', 'KN', 'VC', 'TT'],
+  Africa: ['DZ', 'AO', 'BJ', 'BW', 'BF', 'BI', 'CM', 'CV', 'CI', 'CF', 'TD', 'KM', 'CD', 'CG', 'DJ', 'EG', 'GQ', 'ER', 'SZ', 'ET', 'GA', 'GM', 'GH', 'GN', 'GW', 'KE', 'LS', 'LR', 'LY', 'MG', 'MW', 'ML', 'MR', 'MU', 'YT', 'MA', 'MZ', 'NA', 'NE', 'NG', 'RW', 'ST', 'SN', 'SC', 'SL', 'SO', 'ZA', 'SS', 'SD', 'TZ', 'TG', 'TN', 'UG', 'EH', 'ZA', 'ZM', 'ZW'],
+  Asia: ['AF', 'AM', 'AZ', 'BH', 'BD', 'BT', 'BN', 'KH', 'CN','GE' , 'IN', 'ID', 'IR', 'IQ', 'IL', 'JP', 'JO', 'KZ', 'KW', 'KG', 'LA', 'LB', 'MY', 'MV', 'MN', 'MM', 'NP', 'KP', 'OM', 'PK', 'PS', 'PH', 'QA', 'SA', 'SG', 'KR', 'LK', 'SY', 'TJ', 'TH', 'TL', 'TR', 'TM', 'AE', 'UZ', 'VN', 'YE', 'TW'],
+  Europe: ['AL', 'AD', 'AT', 'BA', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'MC', 'MD', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'UA', 'GB', 'VA', 'BY'],
+  America: ['GL', 'AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE', 'CA', 'MX', 'US', 'GT', 'BZ', 'HN', 'SV', 'NI', 'CR', 'PA', 'JM', 'DO', 'HT', 'CU', 'BS', 'BB', 'GD', 'LC', 'KN', 'VC', 'TT'],
   Oceania: ['AU', 'FJ', 'FM', 'KI', 'MH', 'NR', 'NU', 'NZ', 'PW', 'PG', 'WS', 'TO', 'TV', 'VU'],
 };
 
@@ -225,17 +224,21 @@ function WorldMap() {
   const [selectedContinent, setSelectedContinent] = useState('Asia');
   const [hoveredRegion, setHoveredRegion] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState(null);
+  const [selectedCountryCode, setSelectedCountryCode] = useState(null); 
 
-  const openModal = (countryName) => {
-    setSelectedCountry(countryName);
+  const openModal = (isoCode) => {
+    setSelectedCountryCode(isoCode); 
     setIsOpen(true);
-  }
+  };
+
+  const handleRegionClick = (event, code) => {
+    openModal(code);
+  };
 
   const closeModal = () => {
     setIsOpen(false);
-    setSelectedCountry(null);
-  }
+    setSelectedCountryCode(null);
+  };
 
   const handleContinentChange = (event) => {
     setSelectedContinent(event.target.value);
@@ -260,18 +263,38 @@ function WorldMap() {
   const getRegionColors = () => {
     const baseColors = getContinentColors();
     if (hoveredRegion) {
-      baseColors[hoveredRegion] = '#FF9999'; 
+      baseColors[hoveredRegion] = '#FF9999';
     }
     return baseColors;
+  };
+
+  const getSelectedCountryName = () => {
+    if (selectedCountryCode) {
+      return countryNames[selectedCountryCode];
+    }
+    return null;
+  };
+
+  const getSelectedCountryContinent = () => {
+    if (selectedCountryCode) {
+      for (const continent in continents) {
+        if (continents[continent].includes(selectedCountryCode)) {
+          return continent;
+        }
+      }
+    }
+    return null;
   };
 
   return (
     <div style={{ margin: 'auto', width: '700px', height: '700px' }}>
       <div style={{ marginBottom: '10px' }}>
-        <label htmlFor="대륙 선택">대륙 선택 : </label>
-        <select id="대륙 선택" onChange={handleContinentChange} value={selectedContinent}>
-          {Object.keys(continents).map(continent => (
-            <option key={continent} value={continent}>{continent}</option>
+        <label htmlFor="continentSelect">대륙 선택 : </label>
+        <select id="continentSelect" onChange={handleContinentChange} value={selectedContinent}>
+          {Object.keys(continents).map((continent) => (
+            <option key={continent} value={continent}>
+              {continent}
+            </option>
           ))}
         </select>
       </div>
@@ -291,12 +314,7 @@ function WorldMap() {
               },
             ],
           }}
-          onRegionClick={(event, code) => {
-            const countryName = countryNames[code];
-            if (countryName) {
-              openModal(countryName);
-            }
-          }}
+          onRegionClick={(event, code) => handleRegionClick(event, code)}
           onRegionTipShow={(event, el, code) => {
             const countryName = countryNames[code];
             el.html(`<strong>${countryName}</strong>`);
@@ -305,24 +323,13 @@ function WorldMap() {
           onRegionOut={handleRegionOut}
         />
       </div>
-      <Modal
+      <CountryInfoModal
         isOpen={isOpen}
         onRequestClose={closeModal}
-        style={{
-          content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-          }
-        }}
-      >
-        <h1>나라 여행 위험 정보</h1>
-        <p>{selectedCountry}</p>
-        <button onClick={closeModal}>닫기</button>
-      </Modal>
+        isoCode={selectedCountryCode}
+        countryName={getSelectedCountryName()} 
+        continent={getSelectedCountryContinent()} 
+      />
     </div>
   );
 }
