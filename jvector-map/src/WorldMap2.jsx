@@ -3,7 +3,7 @@ import { VectorMap } from '@react-jvectormap/core';
 import { worldMill } from '@react-jvectormap/world';
 import CountryInfoModal from './CountryInfoModal';
 import TravelCountryInfo from './TravelCountryInfo';
-import { countryNames, continentCoordinates } from './CountryData';
+import { countryNames, countryCoordinates } from './CountryData';
 import helpIcon from './helpIcon.png';
 
 function WorldMap2() {
@@ -12,9 +12,13 @@ function WorldMap2() {
   const [submittedFlightData, setSubmittedFlightData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState(null);
-  const [markers, setMarkers] = useState(continentCoordinates['travel']);
+  const [departureMarker, setDepartureMarker] = useState(null);
+  const [destinationMarker, setDestinationMarker] = useState(null);
   const [forceRender, setForceRender] = useState(0);
   const [helpMessage, setHelpMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const countryCodeRegex = /^[A-Z]{2}$/;
 
   const openModal = (isoCode) => {
     setSelectedCountryCode(isoCode);
@@ -26,6 +30,11 @@ function WorldMap2() {
   };
 
   const handleFlightDataSubmit = () => {
+    if (!countryCodeRegex.test(flightData)) {
+      setError('유효하지 않은 국가 코드입니다. 2자리 대문자 알파벳을 입력해주세요.');
+      return;
+    }
+    setError('');
     setSubmittedFlightData(flightData);
     setFlightData('');
   };
@@ -58,11 +67,34 @@ function WorldMap2() {
     }
   };
 
+  const handleCountryCodesExtracted = (departureId, destinationId) => {
+    console.log(`출발지 ID: ${departureId}, 도착지 ID: ${destinationId}`);
+
+    const departure = countryCoordinates[departureId];
+    const destination = countryCoordinates[destinationId];
+
+    setDepartureMarker(departure ? {
+      name: departure.name,
+      latLng: departure.latLng
+    } : null);
+    setDestinationMarker(destination ? {
+      name: destination.name,
+      latLng: destination.latLng
+    } : null);
+
+    setForceRender(prev => prev + 1); 
+  };
+
+  const markers = [
+    departureMarker,
+    destinationMarker
+  ].filter(marker => marker);
+
   return (
     <div style={{ margin: 'auto', width: '700px', height: '700px', position: 'relative' }}>
       <div style={{ width: '700px', height: '600px' }}>
         <VectorMap
-          key={forceRender} 
+          key={forceRender}
           map={worldMill}
           containerStyle={{
             width: '700px',
@@ -72,8 +104,15 @@ function WorldMap2() {
           markers={markers}
           markerStyle={{
             initial: {
-              fill: 'blue',
+              fill: 'RED',
+              stroke: 'none',
+              r: 4 
             },
+            hover: {
+              fill: 'YELLOW',
+              stroke: 'none',
+              r: 6 
+            }
           }}
           onRegionClick={handleRegionClick}
           onRegionTipShow={(event, el, code) => {
@@ -96,8 +135,14 @@ function WorldMap2() {
           onChange={(e) => setFlightData(e.target.value)}
         />
         <button onClick={handleFlightDataSubmit}>입력</button>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
-      {submittedFlightData && <TravelCountryInfo flightData={submittedFlightData} />}
+      {submittedFlightData && (
+        <TravelCountryInfo
+          flightData={submittedFlightData}
+          onCountryCodesExtracted={handleCountryCodesExtracted}
+        />
+      )}
       <button
         style={{
           position: 'fixed',

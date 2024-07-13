@@ -9,7 +9,7 @@ const getSelectedCountryName = (props) => {
   return null;
 };
 
-const TravelCountryInfo = ({ flightData }) => {
+const TravelCountryInfo = ({ flightData, onCountryCodesExtracted }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [travelInfo, setTravelInfo] = useState(null);
@@ -25,6 +25,9 @@ const TravelCountryInfo = ({ flightData }) => {
           const data = response.data;
           if (data) {
             setTravelInfo(data);
+            const departureId = data.data[0].departure.id;
+            const destinationId = data.data[0].destination.id;
+            onCountryCodesExtracted(departureId, destinationId); // 부모 컴포넌트로 ISO 코드 전달
           } else {
             setError('정보 없음');
           }
@@ -49,12 +52,11 @@ const TravelCountryInfo = ({ flightData }) => {
     return null;
   }
 
-
   return (
     <div>
       <h1>{flightData}</h1>
-      <p>출발지 : {getSelectedCountryName(travelInfo.data[0].departure.id)} || 위험 단계 {travelInfo.data[0].departure.lv} </p>
-      <p>도착지 : {getSelectedCountryName(travelInfo.data[0].destination.id)} || 위험 단계 {travelInfo.data[0].destination.lv} </p>
+      <p>출발지: {getSelectedCountryName(travelInfo.data[0].departure.id)} || 위험 단계 {travelInfo.data[0].departure.lv}</p>
+      <p>도착지: {getSelectedCountryName(travelInfo.data[0].destination.id)} || 위험 단계 {travelInfo.data[0].destination.lv}</p>
     </div>
   );
 };
