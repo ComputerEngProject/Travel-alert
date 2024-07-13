@@ -4,7 +4,7 @@ import { worldMill } from '@react-jvectormap/world';
 import CountryInfoModal from './CountryInfoModal';
 import TravelCountryInfo from './TravelCountryInfo';
 import { countryNames, countryCoordinates } from './CountryData';
-import helpIcon from './helpIcon.png';
+import helpIcon from '../public/helpIcon.png';
 
 function WorldMap2() {
   const [hoveredRegion, setHoveredRegion] = useState(null);
@@ -15,7 +15,6 @@ function WorldMap2() {
   const [departureMarker, setDepartureMarker] = useState(null);
   const [destinationMarker, setDestinationMarker] = useState(null);
   const [forceRender, setForceRender] = useState(0);
-  const [helpMessage, setHelpMessage] = useState('');
   const [error, setError] = useState('');
 
   const openModal = (isoCode) => {
@@ -57,14 +56,6 @@ function WorldMap2() {
     return null;
   };
 
-  const handleMouseOverHelpButton = () => {
-    setHelpMessage("이미지 or 정보 추가");
-  };
-
-  const handleMouseOutHelpButton = () => {
-    setHelpMessage('');
-  };
-
   const handleCountryCodesExtracted = (departureId, destinationId) => {
     console.log(`출발지 ID: ${departureId}, 도착지 ID: ${destinationId}`);
 
@@ -87,6 +78,16 @@ function WorldMap2() {
     departureMarker,
     destinationMarker
   ].filter(marker => marker);
+
+  const showHelpMessage = () => {
+    const helpMessageElement = document.getElementById('helpMessage');
+    helpMessageElement.style.display = 'block';
+  };
+
+  const hideHelpMessage = () => {
+    const helpMessageElement = document.getElementById('helpMessage');
+    helpMessageElement.style.display = 'none';
+  };
 
   return (
     <div style={{ margin: 'auto', width: '1280px', height: '720px', position: 'relative' }}>
@@ -151,24 +152,27 @@ function WorldMap2() {
           border: 'none',
           cursor: 'pointer',
         }}
-        onMouseOver={handleMouseOverHelpButton}
-        onMouseOut={handleMouseOutHelpButton}
+        onMouseOver={showHelpMessage}
+        onMouseOut={hideHelpMessage}
       >
         <img src={helpIcon} alt="Help" style={{ width: '30px', height: '30px' }} />
       </button>
-      {helpMessage && (
-        <div style={{
-          position: 'fixed',
-          bottom: '60px',
-          right: '20px',
-          backgroundColor: 'white',
-          padding: '10px',
-          border: '1px solid #ccc',
-          borderRadius: '5px',
-        }}>
-          {helpMessage}
-        </div>
-      )}
+      <div id="helpMessage" style={{
+        display: 'none',
+        position: 'fixed',
+        bottom: '60px',
+        right: '20px',
+        backgroundColor: 'white',
+        padding: '10px',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+      }}>
+        여행 경보 단계<br/><br/>
+        1단계 : 여행 유의(남색)<br />
+        2단계 : 여행 자제(황색)<br />
+        3단계 : 출국 권고(적색)<br />
+        4단계 : 여행 금지(흑색)
+      </div>
     </div>
   );
 }
