@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { VectorMap } from '@react-jvectormap/core';
 import { worldMill } from '@react-jvectormap/world';
 import CountryInfoModal from './CountryInfoModal';
-import { countryNames, continents, continentCoordinates} from './CountryData';
+import { countryNames, continents} from './CountryData';
 
 function WorldMap() {
   const [selectedContinent, setSelectedContinent] = useState('Asia');

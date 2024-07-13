@@ -89,14 +89,14 @@ function WorldMap2() {
   ].filter(marker => marker);
 
   return (
-    <div style={{ margin: 'auto', width: '700px', height: '700px', position: 'relative' }}>
-      <div style={{ width: '700px', height: '600px' }}>
+    <div style={{ margin: 'auto', width: '1280px', height: '720px', position: 'relative' }}>
+      <div style={{ width: '1280px', height: '720px' }}>
         <VectorMap
           key={forceRender}
           map={worldMill}
           containerStyle={{
-            width: '700px',
-            height: '600px',
+            width: '1280px',
+            height: '720px',
           }}
           backgroundColor="#282c34"
           markers={markers}

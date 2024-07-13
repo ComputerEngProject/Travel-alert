@@ -41,7 +41,7 @@ const countryNames = {
   TJ: '타지키스탄',
   TH: '태국',
   TL: '동티모르',
-  TR: '터키',
+  TR: '튀르키예',
   TM: '투르크메니스탄',
   AE: '아랍에미리트',
   UZ: '우즈베키스탄',
@@ -53,7 +53,7 @@ const countryNames = {
   CI: '코트디부아르',
   DZ: '알제리',
   AO: '앙골라',
-  BJ: '베닌',
+  BJ: '베냉',
   BW: '보츠와나',
   BF: '부르키나파소',
   BI: '부룬디',
@@ -221,6 +221,15 @@ const continents = {
   Oceania: ['AU', 'FJ', 'FM', 'KI', 'MH', 'NR', 'NU', 'NZ', 'PW', 'PG', 'WS', 'TO', 'TV', 'VU','CK','NC'],
 };
 
+const alarmList = {
+  0: '정보 없음',
+  1: '남색 경보(여행유의)',
+  2: '황색 경보(여행자제)',
+  3: '적색 경보(출국권고)',
+  4: '흑색 경보(여행금지)',
+} 
+  
+
 const countryCoordinates = {
   AF: { name: "아프가니스탄", latLng: [33.9391, 67.7099] },
   AL: { name: "알바니아", latLng: [41.1533, 20.1683] },
@@ -229,7 +238,6 @@ const countryCoordinates = {
   AD: { name: "안도라", latLng: [42.5462, 1.6016] },
   AO: { name: "앙골라", latLng: [-11.2027, 17.8733] },
   AI: { name: "앵귈라", latLng: [18.2206, -63.0686] },
-  AG: { name: "앤티가 바부다", latLng: [17.0608, -61.7964] },
   AR: { name: "아르헨티나", latLng: [-38.4161, -63.6167] },
   AM: { name: "아르메니아", latLng: [40.0691, 45.0382] },
   AW: { name: "아루바", latLng: [12.5211, -69.9683] },
@@ -301,6 +309,7 @@ const countryCoordinates = {
   PF: { name: "프랑스령 폴리네시아", latLng: [-17.6797, -149.4068] },
   GA: { name: "가봉", latLng: [-0.8037, 11.6094] },
   GM: { name: "감비아", latLng: [13.4432, -15.3101] },
+  JP: { name: "일본", latLng: [35.92,138.92]},
   GE: { name: "조지아", latLng: [42.3154, 43.3569] },
   GH: { name: "가나", latLng: [7.5399, -0.0016] },
   GI: { name: "지브롤터", latLng: [36.1377, -5.3454] },
@@ -359,6 +368,7 @@ const countryCoordinates = {
   MQ: { name: "마르티니크", latLng: [14.6415, -61.0242] },
   MR: { name: "모리타니", latLng: [21.0079, -10.9408] },
   MU: { name: "모리셔스", latLng: [-20.3484, 57.5522] },
+  TR: { name: "튀르키예", latLng: [39.5297,32.5383]},
   YT: { name: "마요트", latLng: [-12.8275, 45.1662] },
   MX: { name: "멕시코", latLng: [23.6345, -102.5528] },
   FM: { name: "미크로네시아 연방", latLng: [7.4256, 150.5508] },
@@ -435,7 +445,6 @@ const countryCoordinates = {
   TG: { name: "토고", latLng: [8.6195, 0.8248] },
   TK: { name: "토켈라우", latLng: [-9.2000, -171.8500] },
   TO: { name: "통가", latLng: [-21.1789, -175.1982] },
-  TT: { name: "트리니다드 토바고", latLng: [10.6918, -61.2225] },
   TN: { name: "튀니지", latLng: [33.8869, 9.5375] },
   TV: { name: "투발루", latLng: [-7.1095, 179.1940] },
   UG: { name: "우간다", latLng: [1.3733, 32.2903] },
@@ -450,10 +459,11 @@ const countryCoordinates = {
   VN: { name: "베트남", latLng: [14.0583, 108.2772] },
   WF: { name: "왈리스 푸투나", latLng: [-13.3000, -176.2000] },
   EH: { name: "서사하라", latLng: [24.2155, -12.8858] },
+  TW: { name: "대만", latLng: [25.06712,121.6114]},
   YE: { name: "예멘", latLng: [15.5524, 48.5164] },
   ZM: { name: "잠비아", latLng: [-13.1339, 27.8493] },
   ZW: { name: "짐바브웨", latLng: [-19.0154, 29.1549] }
 }
 
 
-export { countryNames, continents, countryCoordinates };
+export { countryNames, continents, countryCoordinates, alarmList};
