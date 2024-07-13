@@ -124,7 +124,7 @@ app.get('/search/nara', async (req: any, res: any) => {
       America: ['GL', 'AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE', 'CA', 'MX', 'US', 'GT', 'BZ', 'HN', 'SV', 'NI', 'CR', 'PA', 'JM', 'DO', 'HT', 'CU', 'BS', 'BB', 'GD', 'LC', 'KN', 'VC', 'TT', 'PR', 'FK'],
       Oceania: ['AU', 'FJ', 'FM', 'KI', 'MH', 'NR', 'NU', 'NZ', 'PW', 'PG', 'WS', 'TO', 'TV', 'VU', 'SB', 'NC'],
     };
-    if ((!country && continent && ccList[continent] !== undefined) || (!continent && country && /[a-zA-Z]{2}/.test(country))) {
+    if ((!country && continent && ccList[continent] !== undefined) || (!continent && country && /^[a-zA-Z]{2}$/.test(country))) {
       const temp = continent ? ccList[continent] : [country]
       for (const index in temp) {
         result.push({ ...(await getTravelAlarm(continent ? temp[index] : country)) });
@@ -144,7 +144,7 @@ app.get('/search/air', async (req: any, res: any) => {
     const result: any[] = [];
   try {
     const { flight } = req.query;
-    if (flight && /[A-Z0-9]{3,7}/.test(flight)) {
+    if (flight && /^[A-Z0-9]{3,7}$/.test(flight)) {
       result.push({ ...(await getAir(flight)) });
     }
     res.json({ data: result });

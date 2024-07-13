@@ -18,8 +18,6 @@ function WorldMap2() {
   const [helpMessage, setHelpMessage] = useState('');
   const [error, setError] = useState('');
 
-  const countryCodeRegex = /^[A-Z]{2}$/;
-
   const openModal = (isoCode) => {
     setSelectedCountryCode(isoCode);
     setIsOpen(true);
@@ -30,8 +28,8 @@ function WorldMap2() {
   };
 
   const handleFlightDataSubmit = () => {
-    if (!countryCodeRegex.test(flightData)) {
-      setError('유효하지 않은 국가 코드입니다. 2자리 대문자 알파벳을 입력해주세요.');
+    if (!(/^[A-Z,0-9]{3,7}$/.test(flightData))) {
+      setError('유효하지 않은 편명입니다.');
       return;
     }
     setError('');
@@ -59,12 +57,12 @@ function WorldMap2() {
     return null;
   };
 
-  const handleHelpButtonClick = () => {
-    if (helpMessage) {
-      setHelpMessage('');
-    } else {
-      setHelpMessage("이미지 or 정보 추가");
-    }
+  const handleMouseOverHelpButton = () => {
+    setHelpMessage("이미지 or 정보 추가");
+  };
+
+  const handleMouseOutHelpButton = () => {
+    setHelpMessage('');
   };
 
   const handleCountryCodesExtracted = (departureId, destinationId) => {
@@ -132,7 +130,7 @@ function WorldMap2() {
       <div>
         <input
           value={flightData}
-          onChange={(e) => setFlightData(e.target.value)}
+          onChange={(e) => setFlightData(e.target.value.toUpperCase())}
         />
         <button onClick={handleFlightDataSubmit}>입력</button>
         {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -153,7 +151,8 @@ function WorldMap2() {
           border: 'none',
           cursor: 'pointer',
         }}
-        onClick={handleHelpButtonClick}
+        onMouseOver={handleMouseOverHelpButton}
+        onMouseOut={handleMouseOutHelpButton}
       >
         <img src={helpIcon} alt="Help" style={{ width: '30px', height: '30px' }} />
       </button>
