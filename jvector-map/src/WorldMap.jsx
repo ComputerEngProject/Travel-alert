@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { VectorMap } from '@react-jvectormap/core';
 import { worldMill } from '@react-jvectormap/world';
 import CountryInfoModal from './CountryInfoModal';
 import { countryNames, continents} from './CountryData';
 
 function WorldMap() {
+  const navigate = useNavigate();
   const [selectedContinent, setSelectedContinent] = useState('Asia');
   const [hoveredRegion, setHoveredRegion] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -103,6 +105,11 @@ function WorldMap() {
         isoCode={selectedCountryCode}
         countryName={getSelectedCountryName()}
       />
+      <button 
+        onClick={() => navigate('/WorldMap2')}>
+         비행기 편명 확인
+      </button>
+
     </div>
   );
 }

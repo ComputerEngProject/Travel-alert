@@ -4,7 +4,7 @@ import { worldMill } from '@react-jvectormap/world';
 import CountryInfoModal from './CountryInfoModal';
 import TravelCountryInfo from './TravelCountryInfo';
 import { countryNames, countryCoordinates } from './CountryData';
-import helpIcon from '../public/helpIcon.png';
+import helpIcon from './helpIcon.png';
 
 function WorldMap2() {
   const [hoveredRegion, setHoveredRegion] = useState(null);
@@ -90,14 +90,14 @@ function WorldMap2() {
   };
 
   return (
-    <div style={{ margin: 'auto', width: '1280px', height: '720px', position: 'relative' }}>
-      <div style={{ width: '1280px', height: '720px' }}>
+    <div style={{ margin: 'auto', width: '1180px', height: '620px', position: 'relative' }}>
+      <div style={{ width: '1180px', height: '620px' }}>
         <VectorMap
           key={forceRender}
           map={worldMill}
           containerStyle={{
-            width: '1280px',
-            height: '720px',
+            width: '1180px',
+            height: '620px',
           }}
           backgroundColor="#282c34"
           markers={markers}
@@ -108,7 +108,7 @@ function WorldMap2() {
               r: 4 
             },
             hover: {
-              fill: 'YELLOW',
+              fill: 'ORANGE',
               stroke: 'none',
               r: 6 
             }
