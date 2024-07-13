@@ -8,6 +8,7 @@ import { countryNames, continents} from './CountryData';
 function WorldMap() {
   const navigate = useNavigate();
   const [selectedContinent, setSelectedContinent] = useState('Asia');
+  const [selectedCountry, setSelectedCountry] = useState('');
   const [hoveredRegion, setHoveredRegion] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState(null);
@@ -28,6 +29,10 @@ function WorldMap() {
 
   const handleContinentChange = (event) => {
     setSelectedContinent(event.target.value);
+  };
+
+  const handleCountryChange = (event) => {
+    setSelectedCountry(event.target.value);
   };
 
   const getContinentColors = () => {
@@ -73,6 +78,14 @@ function WorldMap() {
             </option>
           ))}
         </select>
+        {/* <label htmlFor="continentSelect">재난 위험 주요 국가 : </label>
+        <select id="continentSelect" onChange={handleCountryChange} value={selectedCountry}>
+          {Object.keys(continents).map((continent) => (
+            <option key={continent} value={continent}>
+              {continent}
+            </option>
+          ))}
+        </select> */}
       </div>
       <div style={{ width: '700px', height: '600px' }}>
         <VectorMap
