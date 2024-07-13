@@ -329,6 +329,10 @@ const continentCoordinates = {
     { name: "예멘", latLng: [15.5526, 48.5164] }, // Yemen
     { name: "대만", latLng: [23.6978, 120.9605] } // Taiwan
   ],
+  travel: [
+    { name: "한국", latLng: [35.9078, 127.7669] }, // South Korea
+    { name: "대만", latLng: [23.6978, 120.9605] } // Taiwan
+  ],
   Europe: [
     { name: "알바니아", latLng: [41.1533, 20.1683] }, // Albania
     { name: "안도라", latLng: [42.5462, 1.6016] }, // Andorra

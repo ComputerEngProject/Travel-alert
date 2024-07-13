@@ -9,15 +9,6 @@ function WorldMap() {
   const [hoveredRegion, setHoveredRegion] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState(null);
-  const [markers, setMarkers] = useState(continentCoordinates['Asia']);
-  const [forceRender, setForceRender] = useState(0);
-
-  useEffect(() => {
-    console.log("Selected Continent:", selectedContinent);
-    console.log("Markers:", continentCoordinates[selectedContinent]);
-    setMarkers(continentCoordinates[selectedContinent] || []);
-    setForceRender(prev => prev + 1);
-  }, [selectedContinent]);
 
   const openModal = (isoCode) => {
     setSelectedCountryCode(isoCode);
@@ -68,16 +59,6 @@ function WorldMap() {
     return null;
   };
 
-  const getSelectedCountryContinent = () => {
-    if (selectedCountryCode) {
-      for (const continent in continents) {
-        if (continents[continent].includes(selectedCountryCode)) {
-          return continent;
-        }
-      }
-    }
-    return null;
-  };
 
   return (
     <div style={{ margin: 'auto', width: '700px', height: '700px' }}>
@@ -93,19 +74,12 @@ function WorldMap() {
       </div>
       <div style={{ width: '700px', height: '600px' }}>
         <VectorMap
-          key={forceRender} 
           map={worldMill}
           containerStyle={{
             width: '700px',
             height: '600px',
           }}
           backgroundColor="#282c34"
-          markers={markers}
-          markerStyle={{
-            initial: {
-              fill: 'blue',
-            },
-          }}
           series={{
             regions: [
               {
@@ -128,7 +102,6 @@ function WorldMap() {
         onRequestClose={closeModal}
         isoCode={selectedCountryCode}
         countryName={getSelectedCountryName()}
-        continent={getSelectedCountryContinent()}
       />
     </div>
   );

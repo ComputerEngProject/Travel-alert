@@ -4,9 +4,10 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root'); 
 
-const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName, continent  }) => {
+const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName}) => {
   const [infoUrl, setInfoUrl] = useState(null);
   const [infoLv, setInfoLv] = useState(null);
+  const [infoContent,setInfoContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,13 +15,14 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName, contin
     if (isoCode) {
       console.log(isoCode)
       setLoading(true);
-      axios.get(`http://175.120.206.28:3333/search/nara?&country=${encodeURIComponent(isoCode)}`)
+      axios.get(`http://localhost:3333/search/nara?&country=${encodeURIComponent(isoCode)}`)
         .then(response => {
           console.log(response.data)
           const { data } = response.data;
           if (data) {
             setInfoUrl(data[0].url);
             setInfoLv(data[0].lv);
+            setInfoContent(data[0].content);
           } else {
             setError('정보 없음');
           }
@@ -58,6 +60,7 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName, contin
         <img src={infoUrl} alt={`${countryName} 정보`} style={{ width: '500px', height: 'auto' }} />
       )}
       <p>경보 단계 : {infoLv}</p>
+      <p>경보가 지정된 이유 : {infoContent}</p>
       <button onClick={onRequestClose}>닫기</button>
     </Modal>
   );
