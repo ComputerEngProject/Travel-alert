@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { VectorMap } from '@react-jvectormap/core';
 import { worldMill } from '@react-jvectormap/world';
 import CountryInfoModal from './CountryInfoModal';
-import { countryNames, continents } from './CountryData';
+import { countryNames, countryCoordinates } from './CountryData';
 import helpIcon from './helpIcon.png';
 
 function WorldMap3() {
@@ -13,10 +13,29 @@ function WorldMap3() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState(null);
   const [dangerCountryInfo, setDangerCountryInfo] = useState([]);
+  const [marker, setMarker] = useState({}); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentDateTime, setCurrentDateTime] = useState(''); 
 
   useEffect(() => {
+    const updateDateTime = () => {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1; 
+      const day = now.getDate();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      const second = now.getSeconds();
+
+      const formattedDateTime = `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분 ${second}초 기준`;
+      setCurrentDateTime(formattedDateTime);
+    };
+
+    updateDateTime();
+
+    const intervalId = setInterval(updateDateTime, 1000);
+
     setLoading(true);
     setError(null);
     setDangerCountryInfo([]);
@@ -25,13 +44,31 @@ function WorldMap3() {
       .then(response => {
         const data = response.data.data;
         setDangerCountryInfo(data);
+        const markers = addDangerCountryMarker(data); 
+        setMarker(markers); 
         setLoading(false);
       })
       .catch(error => {
         setError('API 요청 오류');
         setLoading(false);
       });
+
+    return () => clearInterval(intervalId);
   }, []);
+
+  const addDangerCountryMarker = (dangerCountryInfo) => {
+    let addMarker = {};
+    dangerCountryInfo.forEach(countryCode => {
+      let coordinates = countryCoordinates[countryCode];
+      if (coordinates) {
+        addMarker[countryCode] = {
+          name: coordinates.name,
+          latLng: coordinates.latLng
+        };
+      }
+    });
+    return addMarker;
+  };
 
   if (loading) {
     return <div>로딩 중...</div>;
@@ -101,6 +138,14 @@ function WorldMap3() {
 
   return (
     <div style={{ margin: 'auto', width: '700px', height: '700px' }}>
+      <div style={{
+        textAlign: 'center',
+        marginBottom: '10px',
+        fontSize: '18px',
+        fontWeight: 'bold'
+      }}>
+        {currentDateTime}
+      </div>
       <div style={{ width: '700px', height: '600px' }}>
         <VectorMap
           map={worldMill}
@@ -116,6 +161,19 @@ function WorldMap3() {
                 attribute: 'fill',
               },
             ],
+          }}
+          markers={marker}
+          markerStyle={{
+            initial: {
+              fill: 'RED',
+              stroke: 'none',
+              r: 4
+            },
+            hover: {
+              fill: 'ORANGE',
+              stroke: 'none',
+              r: 6
+            }
           }}
           onRegionClick={(event, code) => handleRegionClick(event, code)}
           onRegionTipShow={(event, el, code) => {
