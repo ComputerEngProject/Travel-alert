@@ -74,6 +74,7 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName }) => {
       <p style={{ fontSize: '0.4em' }} className="infoContentText">
         &#9654; {infoContent}
       </p>
+      <br></br>
       <p style={{ fontSize: '0.4em' }}>대사관 이름 : {infoEmbassyName}</p>
       <p style={{ fontSize: '0.4em' }}>대사관 주소 : {infoEmbassyAddress}</p>
       <p style={{ fontSize: '0.4em' }}>대사관 전화번호 : {infoEmbassyTel}</p>

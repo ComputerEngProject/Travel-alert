@@ -111,6 +111,35 @@ async function getAir(flight: any) {
   }
 }
 
+async function getTOP() {
+  try {
+    const BASE_URL = 'http://kosis.kr/openapi/Param/statisticsParameterData.do';
+    const response = await axios.get(`${BASE_URL}`, {
+      params: {
+        method: 'getList',
+        apiKey: "MzA3OGUyOWE5YTg1OWNiOTdhNWVjYjNmZGM0NGU5NzM=",
+        orgId: 101,
+        tblId: 'DT_2UNS0308',
+        objL1: 'ALL',
+        itmId: 'T1',
+        prdSe: 'Y',
+        format: 'json',
+        newEstPrdCnt: 5,
+        jsonVD: 'Y',
+      }
+    });
+    const data = response.data;
+    const DTdata = { '대한민국': 0, '바레인': 0, '중국': 0, '키프로스': 0, '조지아': 0, '인도': 0, '인도네시아': 0, '일본': 0, '요르단': 0, '카자흐스탄': 0, '쿠웨이트': 0, '키르기스스탄': 0, '레바논': 0, '말레이시아': 0, '몽골': 0, '파키스탄': 0, '필리핀': 0, '카타르': 0, '싱가포르': 0, '스리랑카': 0, '투르크메니스탄': 0, '아랍에미리트': 0, '우즈베키스탄': 0, '베트남': 0, '예멘': 0, '멕시코': 0, '미국': 0, '아르헨티나': 0, '볼리비아': 0, '칠레': 0, '콜롬비아': 0, '코스타리카': 0, '에콰도르': 0, '과테말라': 0, '온두라스': 0, '자메이카': 0, '파나마': 0, '파라과이': 0, '페루': 0, '우루과이': 0, '알바니아': 0, '오스트리아': 0, '벨라루스': 0, '불가리아': 0, '덴마크': 0, '핀란드': 0, '헝가리': 0, '이탈리아': 0, '리투아니아': 0, '네덜란드': 0, '포르투갈': 0, '루마니아': 0, '러시아': 0, '슬로베니아': 0, '스페인': 0, '스웨덴': 0, '스위스': 0, '우크라이나': 0, '영국': 0, '몬테네그로': 0, '세르비아': 0, '알제리': 0, '앙골라': 0, '카메룬': 0, '이집트': 0, '에티오피아': 0, '가나': 0, '케냐': 0, '라이베리아': 0, '모로코': 0, '남아프리카공화국': 0, '수단': 0, '탄자니아': 0, '토고': 0, '짐바브웨': 0, '피지': 0, '뉴질랜드': 0, '파푸아뉴기니': 0 }
+    for (const obj of data) {
+      DTdata[obj.C1_NM] = Number(DTdata[obj.C1_NM] ? DTdata[obj.C1_NM] : 0) + Number(obj.DT ? obj.DT : 0);
+    }
+    const countryList = { '대한민국': 'KR', '바레인': 'BH', '중국': 'CN', '키프로스': 'CY', '조지아': 'GE', '인도': 'IN', '인도네시아': 'ID', '일본': 'JP', '요르단': 'JO', '카자흐스탄': 'KZ', '쿠웨이트': 'KW', '키르기스스탄': 'KG', '레바논': 'LB', '말레이시아': 'MY', '몽골': 'MN', '파키스탄': 'PK', '필리핀': 'PH', '카타르': 'QA', '싱가포르': 'SG', '스리랑카': 'LK', '튀르키예': 'TR', '투르크메니스탄': 'TM', '아랍에미리트': 'AE', '우즈베키스탄': 'UZ', '베트남': 'VN', '예멘': 'YE', '멕시코': 'MX', '미국': 'US', '아르헨티나': 'AR', '볼리비아': 'BO', '칠레': 'CL', '콜롬비아': 'CO', '코스타리카': 'CR', '에콰도르': 'EC', '과테말라': 'GT', '온두라스': 'HN', '자메이카': 'JM', '파나마': 'PA', '파라과이': 'PY', '페루': 'PE', '우루과이': 'UY', '알바니아': 'AL', '오스트리아': 'AT', '벨라루스': 'BY', '불가리아': 'BG', '덴마크': 'DK', '핀란드': 'FI', '헝가리': 'HU', '이탈리아': 'IT', '리투아니아': 'LT', '네덜란드': 'NL', '포르투갈': 'PT', '루마니아': 'RO', '러시아': 'RU', '슬로베니아': 'SI', '스페인': 'ES', '스웨덴': 'SE', '스위스': 'CH', '우크라이나': 'UA', '영국': 'GB', '몬테네그로': 'ME', '세르비아': 'RS', '알제리': 'DZ', '앙골라': 'AO', '베냉': 'BJ', '카메룬': 'CM', '이집트': 'EG', '에티오피아': 'ET', '가나': 'GH', '케냐': 'KE', '라이베리아': 'LR', '모로코': 'MA', '남아프리카공화국': 'ZA', '수단': 'SD', '탄자니아': 'TZ', '토고': 'TG', '짐바브웨': 'ZW', 'AU': '호주', '피지': 'FJ', '뉴질랜드': 'NZ', '파푸아뉴기니': 'PG' }
+    return Object.entries(DTdata).sort((A, B) => (B[1]/5) - (A[1]/5)).slice(0, 5).map(val => countryList[val[0]])
+  } catch (error) {
+    return []
+  }
+}
+
 app.get('/search/nara', async (req: any, res: any) => {
   const log = req.path + req.query.continent + req.query.country;
   console.log(log);
@@ -120,7 +149,7 @@ app.get('/search/nara', async (req: any, res: any) => {
     const ccList = {
       Africa: ['DZ', 'AO', 'BJ', 'BW', 'BF', 'BI', 'CM', 'CV', 'CI', 'CF', 'TD', 'KM', 'CD', 'CG', 'DJ', 'EG', 'GQ', 'ER', 'SZ', 'ET', 'GA', 'GM', 'GH', 'GN', 'GW', 'KE', 'LS', 'LR', 'LY', 'MG', 'MW', 'ML', 'MR', 'MU', 'YT', 'MA', 'MZ', 'NA', 'NE', 'NG', 'RW', 'ST', 'SN', 'SC', 'SL', 'SO', 'ZA', 'SS', 'SD', 'TZ', 'TG', 'TN', 'UG', 'EH', 'ZA', 'ZM', 'ZW'],
       Asia: ['AF', 'AM', 'AZ', 'BH', 'BD', 'BT', 'BN', 'KH', 'CN', 'GE', 'IN', 'ID', 'IR', 'IQ', 'IL', 'JP', 'JO', 'KZ', 'KW', 'KG', 'LA', 'LB', 'MY', 'MV', 'MN', 'MM', 'NP', 'KP', 'OM', 'PK', 'PS', 'PH', 'QA', 'SA', 'SG', 'KR', 'LK', 'SY', 'TJ', 'TH', 'TL', 'TR', 'TM', 'AE', 'UZ', 'VN', 'YE', 'TW'],
-      Europe: ['AL', 'AD', 'AT', 'BA', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'MC', 'MD', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'UA', 'GB', 'VA', 'BY'],
+      Europe: ['AL', 'AD', 'AT', 'BA', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IS', 'IE', 'IT', 'LV', 'LI', 'LT', 'LU', 'MT', 'MC', 'MD', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'UA', 'GB', 'VA', 'BY', 'XK'],
       America: ['GL', 'AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'GY', 'PY', 'PE', 'SR', 'UY', 'VE', 'CA', 'MX', 'US', 'GT', 'BZ', 'HN', 'SV', 'NI', 'CR', 'PA', 'JM', 'DO', 'HT', 'CU', 'BS', 'BB', 'GD', 'LC', 'KN', 'VC', 'TT', 'PR', 'FK'],
       Oceania: ['AU', 'FJ', 'FM', 'KI', 'MH', 'NR', 'NU', 'NZ', 'PW', 'PG', 'WS', 'TO', 'TV', 'VU', 'SB', 'NC'],
     };
@@ -134,14 +163,15 @@ app.get('/search/nara', async (req: any, res: any) => {
       return;
     }
   } catch (error) {
+    console.log(log + ` : ${error}`);
     res.status(error.status || 500).json({ data: result });
   }
 });
 
 app.get('/search/air', async (req: any, res: any) => {
-    const log = req.path + req.query.flight;
-    console.log(log);
-    const result: any[] = [];
+  const log = req.path + req.query.flight;
+  console.log(log);
+  const result: any[] = [];
   try {
     const { flight } = req.query;
     if (flight && /^[A-Z0-9]{3,7}$/.test(flight)) {
@@ -151,7 +181,39 @@ app.get('/search/air', async (req: any, res: any) => {
     console.log(log + ' Done');
     return;
   } catch (error) {
+    console.log(log + ` : ${error}`);
     res.status(error.status || 500).json({ data: result });
+  }
+});
+
+app.get('/search/air', async (req: any, res: any) => {
+  const log = req.path + req.query.flight;
+  console.log(log);
+  const result: any[] = [];
+  try {
+    const { flight } = req.query;
+    if (flight && /^[A-Z0-9]{3,7}$/.test(flight)) {
+      result.push({ ...(await getAir(flight)) });
+    }
+    res.json({ data: result });
+    console.log(log + ' Done');
+    return;
+  } catch (error) {
+    console.log(log + ` : ${error}`);
+    res.status(error.status || 500).json({ data: result });
+  }
+});
+
+app.get('/search/top', async (req: any, res: any) => {
+  const log = req.path + req.query.flight;
+  console.log(log);
+  try {
+    res.json({ data: await getTOP() });
+    console.log(log + ' Done');
+    return;
+  } catch (error) {
+    console.log(log + ` : ${error}`);
+    res.status(error.status || 500).json({ data: [] });
   }
 });
 
