@@ -89,14 +89,6 @@ function WorldMap() {
             </option>
           ))}
         </select>
-        {/* <label htmlFor="continentSelect">재난 위험 주요 국가 : </label>
-        <select id="continentSelect" onChange={handleCountryChange} value={selectedCountry}>
-          {Object.keys(continents).map((continent) => (
-            <option key={continent} value={continent}>
-              {continent}
-            </option>
-          ))}
-        </select> */}
       </div>
       <div style={{ width: '700px', height: '600px' }}>
         <VectorMap

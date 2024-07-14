@@ -57,8 +57,6 @@ function WorldMap2() {
   };
 
   const handleCountryCodesExtracted = (departureId, destinationId) => {
-    console.log(`출발지 ID: ${departureId}, 도착지 ID: ${destinationId}`);
-
     const departure = countryCoordinates[departureId];
     const destination = countryCoordinates[destinationId];
 

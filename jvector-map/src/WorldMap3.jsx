@@ -6,31 +6,25 @@ import { worldMill } from '@react-jvectormap/world';
 import CountryInfoModal from './CountryInfoModal';
 import { countryNames, continents } from './CountryData';
 import helpIcon from './helpIcon.png';
-import DangerCountryInfo from './DangerCountryInfo';
 
 function WorldMap3() {
   const navigate = useNavigate();
   const [hoveredRegion, setHoveredRegion] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState(null);
-  const [dangerCountryInfo, setDangerCountryInfo]= useState(null);
+  const [dangerCountryInfo, setDangerCountryInfo] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     setLoading(true);
     setError(null);
-    setDangerCountryInfo(null);
+    setDangerCountryInfo([]);
 
     axios.get(`http://localhost:3333/search/top`)
       .then(response => {
-        const data = response.data;
-        console.log(data);
-        if (data) {
-          setDangerCountryInfo(data);
-        } else {
-          setError('정보 없음');
-        }
+        const data = response.data.data;
+        setDangerCountryInfo(data);
         setLoading(false);
       })
       .catch(error => {
@@ -47,7 +41,7 @@ function WorldMap3() {
     return <div>{error}</div>;
   }
 
-  if (!dangerCountryInfo) {
+  if (dangerCountryInfo.length === 0) {
     return null;
   }
 
@@ -66,7 +60,6 @@ function WorldMap3() {
   };
 
   const getDangerCountryColors = () => {
-    if (!dangerCountryInfo) return {};
     return dangerCountryInfo.reduce((colors, countryCode) => {
       colors[countryCode] = '#CC3333';
       return colors;
@@ -89,9 +82,9 @@ function WorldMap3() {
     return baseColors;
   };
 
-  const getSelectedCountryName = () => {
-    if (selectedCountryCode) {
-      return countryNames[selectedCountryCode];
+  const getSelectedCountryName = (isoCode) => {
+    if (isoCode) {
+      return countryNames[isoCode];
     }
     return null;
   };
@@ -137,8 +130,15 @@ function WorldMap3() {
         isOpen={isOpen}
         onRequestClose={closeModal}
         isoCode={selectedCountryCode}
-        countryName={getSelectedCountryName()}
+        countryName={getSelectedCountryName(selectedCountryCode)}
       />
+      <div>
+        <p>위험 국가 1 : {getSelectedCountryName(dangerCountryInfo[0])}</p>
+        <p>위험 국가 2 : {getSelectedCountryName(dangerCountryInfo[1])}</p>
+        <p>위험 국가 3 : {getSelectedCountryName(dangerCountryInfo[2])}</p>
+        <p>위험 국가 4 : {getSelectedCountryName(dangerCountryInfo[3])}</p>
+        <p>위험 국가 5 : {getSelectedCountryName(dangerCountryInfo[4])}</p>
+      </div>
       <button
         style={{
           position: 'fixed',
