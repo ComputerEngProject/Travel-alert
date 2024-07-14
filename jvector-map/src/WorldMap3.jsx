@@ -1,17 +1,55 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { VectorMap } from '@react-jvectormap/core';
 import { worldMill } from '@react-jvectormap/world';
 import CountryInfoModal from './CountryInfoModal';
-import { countryNames, continents} from './CountryData';
+import { countryNames, continents } from './CountryData';
 import helpIcon from './helpIcon.png';
+import DangerCountryInfo from './DangerCountryInfo';
 
-function WorldMap() {
+function WorldMap3() {
   const navigate = useNavigate();
-  const [selectedContinent, setSelectedContinent] = useState('Asia');
   const [hoveredRegion, setHoveredRegion] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState(null);
+  const [dangerCountryInfo, setDangerCountryInfo]= useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+    setDangerCountryInfo(null);
+
+    axios.get(`http://localhost:3333/search/top`)
+      .then(response => {
+        const data = response.data;
+        console.log(data);
+        if (data) {
+          setDangerCountryInfo(data);
+        } else {
+          setError('정보 없음');
+        }
+        setLoading(false);
+      })
+      .catch(error => {
+        setError('API 요청 오류');
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!dangerCountryInfo) {
+    return null;
+  }
 
   const openModal = (isoCode) => {
     setSelectedCountryCode(isoCode);
@@ -27,13 +65,9 @@ function WorldMap() {
     setSelectedCountryCode(null);
   };
 
-  const handleContinentChange = (event) => {
-    setSelectedContinent(event.target.value);
-  };
-
-  const getContinentColors = () => {
-    const continentCountries = continents[selectedContinent];
-    return continentCountries.reduce((colors, countryCode) => {
+  const getDangerCountryColors = () => {
+    if (!dangerCountryInfo) return {};
+    return dangerCountryInfo.reduce((colors, countryCode) => {
       colors[countryCode] = '#CC3333';
       return colors;
     }, {});
@@ -48,7 +82,7 @@ function WorldMap() {
   };
 
   const getRegionColors = () => {
-    const baseColors = getContinentColors();
+    const baseColors = getDangerCountryColors();
     if (hoveredRegion) {
       baseColors[hoveredRegion] = '#FF9999';
     }
@@ -72,19 +106,8 @@ function WorldMap() {
     helpMessageElement.style.display = 'none';
   };
 
-
   return (
     <div style={{ margin: 'auto', width: '700px', height: '700px' }}>
-      <div style={{ marginBottom: '10px' }}>
-        <label htmlFor="continentSelect">대륙 선택 : </label>
-        <select id="continentSelect" onChange={handleContinentChange} value={selectedContinent}>
-          {Object.keys(continents).map((continent) => (
-            <option key={continent} value={continent}>
-              {continent}
-            </option>
-          ))}
-        </select>
-      </div>
       <div style={{ width: '700px', height: '600px' }}>
         <VectorMap
           map={worldMill}
@@ -116,10 +139,6 @@ function WorldMap() {
         isoCode={selectedCountryCode}
         countryName={getSelectedCountryName()}
       />
-      <button 
-        onClick={() => navigate('/WorldMap2')}>
-         비행기 편명 확인
-      </button>
       <button
         style={{
           position: 'fixed',
@@ -151,9 +170,8 @@ function WorldMap() {
         3단계 : 출국 권고(적색)<br />
         4단계 : 여행 금지(흑색)
       </div>
-
     </div>
   );
 }
 
-export default WorldMap;
+export default WorldMap3;
