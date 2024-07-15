@@ -3,7 +3,7 @@ import axios from 'axios';
 import Modal from 'react-modal';
 import { alarmList } from './CountryData';
 
-Modal.setAppElement('#root'); 
+Modal.setAppElement('#root');
 
 const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName }) => {
   const [infoUrl, setInfoUrl] = useState(null);
@@ -39,7 +39,7 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName }) => {
           setLoading(false);
         })
         .catch(error => {
-          console.error('API 요청 오류:', error); 
+          console.error('API 요청 오류:', error);
           setLoading(false);
         });
     }
@@ -61,6 +61,22 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName }) => {
         },
       }}
     >
+      <style>
+        {`
+          .FirstColor {
+            color: #026ABF;
+          }
+          .SecondColor {
+            color: #FCC33C;
+          }
+          .ThirdColor {
+            color: #C82613;
+          }
+          .FourthColor {
+            color: #292929;
+          }
+        `}
+      </style>
       <h1 style={{ fontSize: '1em' }}>여행 위험 정도</h1>
       <h1 style={{ fontSize: '1em' }}>{countryName}</h1>
       {loading ? (
@@ -70,21 +86,26 @@ const CountryInfoModal = ({ isOpen, onRequestClose, isoCode, countryName }) => {
       ) : (
         <img src={infoUrl} alt={`${countryName} 정보`} style={{ width: '500px', height: 'auto' }} />
       )}
-      <p style={{ fontSize: '0.4em' }}>경보 단계 : {alarmList[infoLv]}</p>
-      <p style={{ fontSize: '0.4em' }} className="infoContentText">
+      <p>※ 여행 경보 정보</p>
+      <p class={!infoLv || infoLv === 0 ? 'NoneColor' : infoLv === 1 ? 'FirstColor' : infoLv === 2 ? 'SecondColor' : infoLv === 3 ? 'ThirdColor' : infoLv === 4 ? 'FourthColor' : ''} style={{ fontSize: '0.4em' }}>경보 단계 : <b>{alarmList[infoLv]}</b></p>
+      {infoLv ? <p class={!infoLv || infoLv === 0 ? 'NoneColor' : infoLv === 1 ? 'FirstColor' : infoLv === 2 ? 'SecondColor' : infoLv === 3 ? 'ThirdColor' : infoLv === 4 ? 'FourthColor' : ''} style={{ fontSize: '0.4em' }} >
         &#9654; {infoContent}
-      </p>
-      <br></br>
-      <p style={{ fontSize: '0.4em' }}>대사관 이름 : {infoEmbassyName}</p>
-      <p style={{ fontSize: '0.4em' }}>대사관 주소 : {infoEmbassyAddress}</p>
-      <p style={{ fontSize: '0.4em' }}>대사관 전화번호 : {infoEmbassyTel}</p>
-      <p style={{ fontSize: '0.4em' }}>대사관 긴급 전화번호 : {infoEmbassyEtel}</p>
-      <button 
+      </p> : ''}
+      <p>※ 대사관 정보</p>
+      {
+      infoEmbassyName !== '정보 없음' ?
+        <div>
+          <p style={{ fontSize: '0.4em' }}>이&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;름 : <b>{infoEmbassyName}</b></p>
+          <p style={{ fontSize: '0.4em' }}>주&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;소 : <b>{infoEmbassyAddress}</b></p>
+          <p style={{ fontSize: '0.4em' }}>전화번호 : (일반) <b>{String(infoEmbassyTel).replace('(','+').replace(')','')}</b> / (긴급) <b>{String(infoEmbassyEtel).replace('(','+').replace(')','')}</b></p>
+        </div> :
+        <p style={{ fontSize: '0.4em' }}>대사관 정보가 존재하지 않습니다.</p>
+      }
+      <button
         style={{ fontSize: '0.4em' }}
         onClick={onRequestClose}
       >닫기</button>
     </Modal>
   );
 };
-
 export default CountryInfoModal;

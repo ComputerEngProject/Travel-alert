@@ -137,7 +137,7 @@ function WorldMap3() {
   };
 
   return (
-    <div style={{ margin: 'auto', width: '700px', height: '700px' }}>
+    <div style={{ margin: 'auto', width: '1180px', height: '620px', position: 'relative'  }}>
       <div style={{
         textAlign: 'center',
         marginBottom: '10px',
@@ -146,12 +146,12 @@ function WorldMap3() {
       }}>
         {currentDateTime}
       </div>
-      <div style={{ width: '700px', height: '600px' }}>
+      <div style={{ width: '1180px', height: '620px' }}>
         <VectorMap
           map={worldMill}
           containerStyle={{
-            width: '700px',
-            height: '600px',
+            width: '1180px',
+            height: '620px',
           }}
           backgroundColor="#282c34"
           series={{
@@ -190,12 +190,9 @@ function WorldMap3() {
         isoCode={selectedCountryCode}
         countryName={getSelectedCountryName(selectedCountryCode)}
       />
+      <p>최근 5년간 재난으로 인한 인명 피해가 가장 많이 발생한 국가 입니다.</p>
       <div>
-        <p>위험 국가 1 : {getSelectedCountryName(dangerCountryInfo[0])}</p>
-        <p>위험 국가 2 : {getSelectedCountryName(dangerCountryInfo[1])}</p>
-        <p>위험 국가 3 : {getSelectedCountryName(dangerCountryInfo[2])}</p>
-        <p>위험 국가 4 : {getSelectedCountryName(dangerCountryInfo[3])}</p>
-        <p>위험 국가 5 : {getSelectedCountryName(dangerCountryInfo[4])}</p>
+        <p>{getSelectedCountryName(dangerCountryInfo[0])}, {getSelectedCountryName(dangerCountryInfo[1])}, {getSelectedCountryName(dangerCountryInfo[2])}, {getSelectedCountryName(dangerCountryInfo[3])}, {getSelectedCountryName(dangerCountryInfo[4])}</p>
       </div>
       <button
         style={{
@@ -222,11 +219,18 @@ function WorldMap3() {
         border: '1px solid #ccc',
         borderRadius: '5px',
       }}>
-        여행 경보 단계<br/><br/>
-        1단계 : 여행 유의(남색)<br />
-        2단계 : 여행 자제(황색)<br />
-        3단계 : 출국 권고(적색)<br />
-        4단계 : 여행 금지(흑색)
+        여행 경보 단계<br/>
+        <p style={{ fontSize: '0.8em', color: '#026ABF' }}>1단계(남색) / 여행 유의: 국내 대도시보다 상당히 높은 수준의 위험<br />
+        → 신변안전 위험 요인 숙지·대비</p>
+        <p style={{ fontSize: '0.8em', color: '#FCC33C' }}>2단계(황색) / 여행 자제: 국내 대도시보다 매우 높은 수준의 위험<br />
+        → (여행예정자) 불필요한 여행 자제<br/>→ (체류자) 신변안전 특별유의</p>
+        <p style={{ fontSize: '0.8em', color: '#C82613' }}>3단계(적색) / 출국 권고: 국민의 생명과 안전을 위협하는 심각한 수준의 위험<br />
+        → (여행예정자) 여행 취소·연기<br/>→ (체류자) 긴요한 용무가 아닌 한 출국</p>
+        <p style={{ fontSize: '0.8em', color: '#292929' }}>4단계(흑색) / 여행 금지: 국민의 생명과 안전을 위협하는 매우 심각한 수준의 위험<br />
+        → (여행예정자) 여행금지 준수<br/>→ (체류자) 즉시 대피·철수</p>
+        <p style={{ fontSize: '0.8em', color: '#E39289' }}>특별여행주의보: 단기적으로 긴급한 위험이 있는 경우<br />
+        → (행동 요령) 2단계 이상 3단계 이하에 준함</p>
+        * 여행 경보가 없는 경우 표시되지 않습니다.
       </div>
     </div>
   );
