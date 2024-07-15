@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { countryNames } from './CountryData';
+import { alarmList } from './CountryData';
 
 const getSelectedCountryName = (props) => {
   if (props) {
@@ -54,9 +55,25 @@ const TravelCountryInfo = ({ flightData, onCountryCodesExtracted }) => {
 
   return (
     <div>
+      <style>
+        {`
+          .FirstColor {
+            color: #026ABF;
+          }
+          .SecondColor {
+            color: #FCC33C;
+          }
+          .ThirdColor {
+            color: #C82613;
+          }
+          .FourthColor {
+            color: #292929;
+          }
+        `}
+      </style>
       <h1>{flightData}</h1>
-      <p>출발지: {getSelectedCountryName(travelInfo.data[0].departure.id)} || 위험 단계 {travelInfo.data[0].departure.lv}</p>
-      <p>도착지: {getSelectedCountryName(travelInfo.data[0].destination.id)} || 위험 단계 {travelInfo.data[0].destination.lv}</p>
+      <p>↓ 출발지: {getSelectedCountryName(travelInfo.data[0].departure.id)}{<p class={!travelInfo.data[0].departure.lv || travelInfo.data[0].departure.lv === 0 ? 'NoneColor' : travelInfo.data[0].departure.lv === 1 ? 'FirstColor' : travelInfo.data[0].departure.lv === 2 ? 'SecondColor' : travelInfo.data[0].departure.lv === 3 ? 'ThirdColor' : travelInfo.data[0].departure.lv === 4 ? 'FourthColor' : ''}><b>{alarmList[travelInfo.data[0].departure.lv]}</b></p>}</p>
+      <p>↓ 도착지: {getSelectedCountryName(travelInfo.data[0].destination.id)}{<p class={!travelInfo.data[0].destination.lv || travelInfo.data[0].destination.lv === 0 ? 'NoneColor' : travelInfo.data[0].destination.lv === 1 ? 'FirstColor' : travelInfo.data[0].destination.lv === 2 ? 'SecondColor' : travelInfo.data[0].destination.lv === 3 ? 'ThirdColor' : travelInfo.data[0].destination.lv === 4 ? 'FourthColor' : ''}><b>{alarmList[travelInfo.data[0].destination.lv]}</b></p>}</p>
     </div>
   );
 };
